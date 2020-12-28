@@ -7,21 +7,10 @@ draft = TRUE
 tags = ["ml", "dataviz", "SA", "school"]
 categories = ["data science", "public policy"]
 [[images]]
-  src = "img/2019/03/pic01.jpg"
-  alt = "Mountain Range Through Clouds"
-  stretch = "horizontal"
-[[images]]
-  src = "img/2019/03/pic02.jpg"
-  alt = "Desert Scene"
-[[images]]
-  src = "img/2019/03/pic03.jpg"
-  alt = "Valley"
+  src = "img/2019/03/sa_header.jpg"
+  alt = "SA evidence kit"
   stretch = "horizontal"
 ---
-
-
-
-
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = F,error=F,message=F)
@@ -32,6 +21,9 @@ require(plyr)
 require(tidyverse)
 require(nnet) # For multinomial models
 require(obsval) # For simulating confidence intervals
+require(plotly)
+library(knitr)
+require(kableExtra)
 ```
 
 ```{r,echo=FALSE}
@@ -43,62 +35,59 @@ dta$sa_vote = as.numeric(dta$sa_vote)
 results.a <- lm(passed ~ sa_vote + year + dem + pres , data = dta)
 results_pred <- predict(results.a, type = "response")
 ```
+Do you know how far the closest hospital to you that you should go to if you've been sexually assaulted? 
+
+You may hope that it's just your nearest hospital. Unfortanely, it's most likely not. The majority of hospitals do not have the appropriate care in place for a sexual assault surivor. A sexual assault nurse examiner (SANE) -a particular type of sexual assault forensic examiners—are registered nurses, including nurse midwives and other advanced practice nurses, who have received specialized education and have fulfilled clinical requirements to perform sexual assault forensic exams. 
+
+According to a GAO study <cite>[^1]</cite> , "coalition officials in Wisconsin told us that nearly half of all counties in the state do not have any examiner programs available, and coalition officials in Nebraska told us that most counties in the state do not have examiner programs available."
+
+Hospitals in urban areas are more likely to have SANE exams, but in the rural Western region of Colorado, for example, victims may have to travel more than an hour to reach a facility with examiners available. In general, state Service-Training-Officers-Prosecutors (STOP) administrators and coalition officials explained that it could take a victim 30 minutes or less in urban areas to up to 2 hours in rural areas to reach a facility that has an examiner available. <cite>[^1]</cite> 
+
+In Milkwaukee WI, only 1 out of the 5 major hospitals has examiners. In Washington D.C., only 1 out of the 16 medical centers have examiners. 
+
+[^1]: The above quote is excerpted from a [GAO report](https://www.gao.gov/assets/680/675879.pdf), March 2016.
+
+## SASCA
+
+The Survivors' Access to Supportive Care Act is a bill that was introduced in the first session of the 116th congress, and then referred to the Committee on Health, Education, Labor, and Pensions. It has been languishing there due to a variety of factors, one of which is the main sponsor, Patty Murray from Washington state, has low confidence that it would be passed if brought up for a vote. The SASCA bill would “increase access to medical forensic sexual assault examinations and treatment provided by sexual assault forensic examiners for survivors, by identifying and addressing gaps in obtaining those services.” <cite>[^3]</cite>   
+
+## What is the budget of SASCA?
+
+The bill itself has a pilot program that terminates after 2 years, and requests 7 million dollars, or 1.461× 10-6% of the federal budget, to be appropriated to carry it out. 
+
+The graph below compares the budget to the Violence Against Women Act, and H.R. 6893, a mental health bill. 
+
+[^2]: The above quote is from the text of the SASCA [bill](https://www.congress.gov/bill/116th-congress/senate-bill/402/text)
 
 
-
-```{r, echo=FALSE}
-#sa_bill, dem president
-equation1=function(x){coef(results.a)[4]*x+coef(results.a)[1]+coef(results.a)[2]+coef(results.a)[3]*2021+coef(results.a)[5]}
-
-#sa_bill, rep president
-equation2=function(x){coef(results.a)[4]*x+coef(results.a)[1]+coef(results.a)[2]+coef(results.a)[3]*2021}
-
-ggplot(dta,aes(y=passed,x=dem))+
-        stat_function(aes(color="Democratic President"),fun=equation1,geom="line")+
-        stat_function(aes(color="Republican President"), fun=equation2,geom="line", linetype="longdash")+
-       labs(title ="Comparing Probabilities with Democratic and Republican President", 
-            x = "Number of Democratic Seats", y = "Probability of Passing") +
-    scale_colour_manual("", values = c("blue", "red")) +
-  scale_linetype_manual(values=c("solid", "longdash"))+
-  theme_minimal() +
-  theme(axis.text=element_text(size=11),
-        axis.title=element_text(size=13)) + 
-   theme(plot.title = element_text(lineheight=3, face="bold", color="black", size=14))
-
-#ggsave("plot1.png", width = 20, height = 20, units = "cm", dpi=600)
-```
+```{r,echo=FALSE}
+#produces a graph of budget for health bills
+name2 <- c("SASCA", "VAWA", "HR 6893")
+cost2 <- c(7, 485.5, 390)
 
 
-```{r, echo=FALSE}
-by_year= aggregate(x = dta$passed,                # Specify data column
-          by = list(dta$year),              # Specify group indicator
-          FUN = sum)                            # Specify function (i.e. sum)
+# Create data frame 
+bill_cost2 <- data.frame(name2, cost2)
 
-dta["Count"] <-1
-by_year_count= aggregate(x = dta$Count,                # Specify data column
-          by = list(dta$year),              # Specify group indicator
-          FUN = sum)                            # Specify function (i.e. sum)
-
-
-by_year_count["prop"] = by_year$x / by_year_count$x
-
-```
-
-```{r, echo=FALSE}
-ggplot(data=by_year_count, aes(x=Group.1, y=prop)) +
+ggplot(data=bill_cost2, aes(x=name2, y=cost2)) +
   geom_bar(stat="identity", fill="steelblue")+
-  labs(title ="Passing Health-Related Votes by Year", 
-            x = "Year", y = "Proportion of Passing Health-Related Votes") +
-  theme(axis.text=element_text(size=11),
-        axis.title=element_text(size=13)) + 
+  labs(title ="Budget of Health Related Bills (2019)", 
+            x = "", y = "Cost in Millions of Dollars") +
+  theme(axis.text=element_text(size=14),
+        axis.title=element_text(size=18)) + 
    theme(plot.title = element_text(lineheight=3, face="bold", color="black", size=14))+
-  geom_smooth(method='lm', se=FALSE, color="black") +
   theme_minimal()
 
-#ggsave("plot2.png", width = 20, height = 20, units = "cm", dpi=600)
-
 ```
+
+Compared to other bills that appropriated money for survivors, SASCA's budget is very small.
+
+
+7 million dollars is a tiny number compared to the federal budget. What if we compared this number against what we spend for medicare and medicaid? 
+
+
 ```{r, echo=FALSE}
+#produces a graph comparing SASCA to medicare/aid
 name <- c("SASCA", "VAWA", "HR 6893", "Medicare", "Medicaid")
 cost <- c(7, 485.5, 390, 460000, 630000)
 
@@ -119,67 +108,83 @@ ggplot(data=bill_cost, aes(x=name, y=cost)) +
 
 ```
 
-```{r,echo=FALSE}
-name2 <- c("SASCA", "VAWA", "HR 6893")
-cost2 <- c(7, 485.5, 390)
+
+SASCA nearly disappears from the graph. The budget of SASCA, comparatively, is a drop in the bucket. 
+
+## Why now?
+
+The next season of Congress will be the first time since SASCA was brought up where there is a good chance of it passing- there is a democratic president, and perhaps even a democratic Senate majority. 
+Over time, the amount of health-related bills that have been brought up for a vote for in the Senate have decreased, as seen in the graph below. 
 
 
-# Create data frame 
-bill_cost2 <- data.frame(name2, cost2)
+```{r, echo=FALSE}
+by_year= aggregate(x = dta$passed,                # Specify data column
+          by = list(dta$year),              # Specify group indicator
+          FUN = sum)                            # Specify function (i.e. sum)
 
-ggplot(data=bill_cost2, aes(x=name2, y=cost2)) +
+dta["Count"] <-1
+by_year_count= aggregate(x = dta$Count,                # Specify data column
+          by = list(dta$year),              # Specify group indicator
+          FUN = sum)                            # Specify function (i.e. sum)
+
+
+by_year_count["prop"] = by_year$x / by_year_count$x
+
+```
+
+```{r, echo=FALSE}
+# a bargraph showing how likely it is to pass health related votes over time. 
+ggplot(data=by_year_count, aes(x=Group.1, y=prop)) +
   geom_bar(stat="identity", fill="steelblue")+
-  labs(title ="Budget of Health Related Bills (2019)", 
-            x = "", y = "Cost in Millions of Dollars") +
-  theme(axis.text=element_text(size=14),
-        axis.title=element_text(size=18)) + 
-   theme(plot.title = element_text(lineheight=3, face="bold", color="black", size=14))+
-  theme_minimal()
-
-#ggsave("plot3.png", width = 20, height = 20, units = "cm", dpi=600)
-
-```
-
-```{r,echo=FALSE}
-library(plotly)
-fig <- plot_ly(
-    x = c("SASCA", "VAWA", "HR 6893"),
-    y = c(7, 485.5, 390),
-    type = 'bar',
-    name = 'Team A',
-    text = c("SASCA", "VAWA", "HR 6893")
-  )
-fig <- fig %>% layout(
-    title = 'Inventory',
-    xaxis = list(
-      type = 'category',
-      title = 'Product Code'
-    ),
-    yaxis = list(title = "y")
-  )
-
-fig
-```
-
-
-```{r,echo=FALSE}
-#sa_bill, dem president
-equation1=function(x){coef(results.a)[4]*x+coef(results.a)[1]+coef(results.a)[2]+coef(results.a)[3]*2021+coef(results.a)[5]}
-
-ggplot(dta,aes(y=passed,x=dem))+
-        stat_function(aes(color="Democratic President"),fun=equation1,geom="line")+
-       labs(title ="Comparing Probabilities with Democratic President", 
-            x = "Number of Democratic Seats", y = "Probability of Passing") +
-    scale_colour_manual("", values = c("blue", "red")) +
-  scale_linetype_manual(values=c("solid", "longdash"))+
-  theme_minimal() +
+  labs(title ="Passing Health-Related Votes by Year", 
+            x = "Year", y = "Proportion of Passing Health-Related Votes") +
   theme(axis.text=element_text(size=11),
         axis.title=element_text(size=13)) + 
-   theme(plot.title = element_text(lineheight=3, face="bold", color="black", size=14))
-
+   theme(plot.title = element_text(lineheight=3, face="bold", color="black", size=14))+
+  geom_smooth(method='lm', se=FALSE, color="black") +
+  theme_minimal()
 
 ```
 
+*This graph was created by pulling all the roll-call votes for the past 30 years for health-related votes by the Senate and seeing if the bill was passed, or its budget approved.  
+
+## Analysis
+
+The source of the data is from VoteView, a website dedicated to recording “every congressional roll call vote”  of the United States government in American history. Once the data was obtained, knowing that our society and culture shifts over time as sexual assault survivors become less stigmatized, the data set is truncated to the last complete 30 years of data (1989-2020). Recognizing that a variety of topics are brought up for a vote, the data set is limited to all the roll call votes to relating to with healthcare, hospital funding, and other medical concerns. (N=953) To help create an accurate model, all votes in the dataset relating to sexual assault, rape, and sexual survivors are then labeled. (N=89) 
+The result of Senate votes are not just passed/not passed, but are more complex and specific to the question brought up to vote. To simplify the model, I chose to reduce the dimensionality and change this to simply either passed or not passed. From here, I added in the ideological party of each president, as well as the number of Democratic seats for each Congress. 
+
+After I had a cleaned data set, I did a linear regression looking at if the vote passed. The general equation is as following: 
+
+Probability of vote passing = vote related to sexual assault(0 or 1) + number of democratic seats + democratic president(0 or 1)
+
+The model also controls for year, as it has an effect of the vote passing. 
+
+### Results
+After running the regression, the number of Democratic seats and the party affiliation of the president are both statistically significant coefficients at the .1 level, but do not reach the desired .05 p-value. Their p-values are .09 and .08 respectively. This does mean this recommendation should be taken with a grain of salt, as there are outlying factors hiding in the error term. However, as politics is not a clear-cut game, in the future the model can control for the ideology of the Senate sponsor, the amount of bills passed in a session, and other human complexities to be more accurate. A vote was related to sexual assault was statistically insignificant at the .1 level, having a p-value of .15. 
+
+Once I had a workable equation, I wanted to see the expected value of SASCA passing under different circumstances. The probabilities are in the table below: 
+
+```{r, echo=FALSE}
+#options(knitr.table.format = "html") 
+number_of_democratic_seats = c(48, 50, 52)
+probability_of_passing = c(.5537, .5605, .5673)
+
+text_tbl <- data.frame(
+  num_seats = c(48, 50, 52),
+  probability_of_passing = c(.5537, .5605, .5673)
+  )
+text_tbl %>%
+  kbl()
+
+```
+  
+  
+As you can see, the overall probability is right around 50%, or almost a coin flip. This is to be expected from our low confidence coefficients. However, the trend  of the probability and the overall range is what is more interesting. As you can see, as the number of Democratic seats increase, so does the probability of a vote for a bill similar to SASCA passing. 
+
+### Every seat matters
+Every democratic seat matters: in January, there are 2 Congressional run-off elections happening, which will change the probability of SASCA getting brought up and passed in the new year. 
+
+In the graph below, you can see how the number of seats changes the range of likelyhood that SASCA will pass. 
 
 ```{r,echo=FALSE}
 #what I want to do: create confidence intervals for 48, 49, 50, senators. 
@@ -193,6 +198,7 @@ ci2 = predict(results.a, newdata2, interval="confidence")
 ```
 
 ```{r,echo=FALSE}
+# interactive graph showing how the likelyhood of SASCA passing changes with the seats in GA. 
 x <- c(0:3)
 df <- data.frame(x, ci0, ci1, ci2)
 
@@ -250,6 +256,11 @@ fig
 
 ```
 
-catdog
+Call your friends in Georgia! Ask them to come out and vote.
+
+If you're upset that this bill hasn't passed yet, or that it wasn't brought up in 2020, [call your Senator or representative!](https://www.usa.gov/elected-officials) 
+
+Going forward into the new 117th Congress, SASCA should be brought up for a vote. Leaving SASCA in bill limbo if there is a good possibility of passing it is irresponsible to sexual assault survivors.
+
 
 
