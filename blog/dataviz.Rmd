@@ -175,7 +175,6 @@ text_tbl <- data.frame(
   )
 text_tbl %>%
   kbl()
-
 ```
   
   
