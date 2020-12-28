@@ -1,0 +1,255 @@
+---
+title = "This my Data Viz Final."
+description = "small project showing why SASCA should pass."
+author = "Nerissa Lemon"
+date = "2020-12-26"
+draft = TRUE
+tags = ["ml", "dataviz", "SA", "school"]
+categories = ["data science", "public policy"]
+[[images]]
+  src = "img/2019/03/pic01.jpg"
+  alt = "Mountain Range Through Clouds"
+  stretch = "horizontal"
+[[images]]
+  src = "img/2019/03/pic02.jpg"
+  alt = "Desert Scene"
+[[images]]
+  src = "img/2019/03/pic03.jpg"
+  alt = "Valley"
+  stretch = "horizontal"
+---
+
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = F,error=F,message=F)
+require(ggplot2)
+require(ggiraph)
+require(ggeffects)
+require(plyr)
+require(tidyverse)
+require(nnet) # For multinomial models
+require(obsval) # For simulating confidence intervals
+```
+
+```{r,echo=FALSE}
+rm(list = ls())
+dta <- readr::read_csv('/Users/Nerissa/Library/Mobile Documents/com~apple~CloudDocs/gt/f2020/dataviz/dviz.csv')
+
+dta$passed = as.numeric(dta$passed)
+dta$sa_vote = as.numeric(dta$sa_vote)
+results.a <- lm(passed ~ sa_vote + year + dem + pres , data = dta)
+results_pred <- predict(results.a, type = "response")
+```
+
+
+
+```{r, echo=FALSE}
+#sa_bill, dem president
+equation1=function(x){coef(results.a)[4]*x+coef(results.a)[1]+coef(results.a)[2]+coef(results.a)[3]*2021+coef(results.a)[5]}
+
+#sa_bill, rep president
+equation2=function(x){coef(results.a)[4]*x+coef(results.a)[1]+coef(results.a)[2]+coef(results.a)[3]*2021}
+
+ggplot(dta,aes(y=passed,x=dem))+
+        stat_function(aes(color="Democratic President"),fun=equation1,geom="line")+
+        stat_function(aes(color="Republican President"), fun=equation2,geom="line", linetype="longdash")+
+       labs(title ="Comparing Probabilities with Democratic and Republican President", 
+            x = "Number of Democratic Seats", y = "Probability of Passing") +
+    scale_colour_manual("", values = c("blue", "red")) +
+  scale_linetype_manual(values=c("solid", "longdash"))+
+  theme_minimal() +
+  theme(axis.text=element_text(size=11),
+        axis.title=element_text(size=13)) + 
+   theme(plot.title = element_text(lineheight=3, face="bold", color="black", size=14))
+
+#ggsave("plot1.png", width = 20, height = 20, units = "cm", dpi=600)
+```
+
+
+```{r, echo=FALSE}
+by_year= aggregate(x = dta$passed,                # Specify data column
+          by = list(dta$year),              # Specify group indicator
+          FUN = sum)                            # Specify function (i.e. sum)
+
+dta["Count"] <-1
+by_year_count= aggregate(x = dta$Count,                # Specify data column
+          by = list(dta$year),              # Specify group indicator
+          FUN = sum)                            # Specify function (i.e. sum)
+
+
+by_year_count["prop"] = by_year$x / by_year_count$x
+
+```
+
+```{r, echo=FALSE}
+ggplot(data=by_year_count, aes(x=Group.1, y=prop)) +
+  geom_bar(stat="identity", fill="steelblue")+
+  labs(title ="Passing Health-Related Votes by Year", 
+            x = "Year", y = "Proportion of Passing Health-Related Votes") +
+  theme(axis.text=element_text(size=11),
+        axis.title=element_text(size=13)) + 
+   theme(plot.title = element_text(lineheight=3, face="bold", color="black", size=14))+
+  geom_smooth(method='lm', se=FALSE, color="black") +
+  theme_minimal()
+
+#ggsave("plot2.png", width = 20, height = 20, units = "cm", dpi=600)
+
+```
+```{r, echo=FALSE}
+name <- c("SASCA", "VAWA", "HR 6893", "Medicare", "Medicaid")
+cost <- c(7, 485.5, 390, 460000, 630000)
+
+
+# Create data frame 
+bill_cost <- data.frame(name, cost)
+
+ggplot(data=bill_cost, aes(x=name, y=cost)) +
+  geom_bar(stat="identity", fill="steelblue")+
+  labs(title ="Budget of Health Related Bills (2019)", 
+            x = "", y = "Cost in Millions of Dollars") +
+  theme(axis.text=element_text(size=11),
+        axis.title=element_text(size=13)) + 
+   theme(plot.title = element_text(lineheight=3, face="bold", color="black", size=14))+
+  theme_minimal()
+
+#ggsave("plot4.png", width = 20, height = 20, units = "cm", dpi=600)
+
+```
+
+```{r,echo=FALSE}
+name2 <- c("SASCA", "VAWA", "HR 6893")
+cost2 <- c(7, 485.5, 390)
+
+
+# Create data frame 
+bill_cost2 <- data.frame(name2, cost2)
+
+ggplot(data=bill_cost2, aes(x=name2, y=cost2)) +
+  geom_bar(stat="identity", fill="steelblue")+
+  labs(title ="Budget of Health Related Bills (2019)", 
+            x = "", y = "Cost in Millions of Dollars") +
+  theme(axis.text=element_text(size=14),
+        axis.title=element_text(size=18)) + 
+   theme(plot.title = element_text(lineheight=3, face="bold", color="black", size=14))+
+  theme_minimal()
+
+#ggsave("plot3.png", width = 20, height = 20, units = "cm", dpi=600)
+
+```
+
+```{r,echo=FALSE}
+library(plotly)
+fig <- plot_ly(
+    x = c("SASCA", "VAWA", "HR 6893"),
+    y = c(7, 485.5, 390),
+    type = 'bar',
+    name = 'Team A',
+    text = c("SASCA", "VAWA", "HR 6893")
+  )
+fig <- fig %>% layout(
+    title = 'Inventory',
+    xaxis = list(
+      type = 'category',
+      title = 'Product Code'
+    ),
+    yaxis = list(title = "y")
+  )
+
+fig
+```
+
+
+```{r,echo=FALSE}
+#sa_bill, dem president
+equation1=function(x){coef(results.a)[4]*x+coef(results.a)[1]+coef(results.a)[2]+coef(results.a)[3]*2021+coef(results.a)[5]}
+
+ggplot(dta,aes(y=passed,x=dem))+
+        stat_function(aes(color="Democratic President"),fun=equation1,geom="line")+
+       labs(title ="Comparing Probabilities with Democratic President", 
+            x = "Number of Democratic Seats", y = "Probability of Passing") +
+    scale_colour_manual("", values = c("blue", "red")) +
+  scale_linetype_manual(values=c("solid", "longdash"))+
+  theme_minimal() +
+  theme(axis.text=element_text(size=11),
+        axis.title=element_text(size=13)) + 
+   theme(plot.title = element_text(lineheight=3, face="bold", color="black", size=14))
+
+
+```
+
+
+```{r,echo=FALSE}
+#what I want to do: create confidence intervals for 48, 49, 50, senators. 
+newdata0 = data.frame(sa_vote=1, year=2020, dem=48, pres=1)
+newdata1 = data.frame(sa_vote=1, year=2020, dem=49, pres=1)
+newdata2 = data.frame(sa_vote=1, year=2020, dem=50, pres=1)
+
+ci0 = predict(results.a, newdata0, interval="confidence") 
+ci1 = predict(results.a, newdata1, interval="confidence") 
+ci2 = predict(results.a, newdata2, interval="confidence") 
+```
+
+```{r,echo=FALSE}
+x <- c(0:3)
+df <- data.frame(x, ci0, ci1, ci2)
+
+ax <- list(
+  title = "Number of Seats",
+  zeroline = FALSE,
+  showline = FALSE,
+  showticklabels = TRUE,
+  showgrid = FALSE,
+  domain = c(0.1, 1)
+)
+
+ay <- list(
+  title = "Probability of Passing",
+  zeroline = FALSE,
+  showline = FALSE,
+  showticklabels = TRUE,
+  showgrid = TRUE
+)
+
+#try = seq(1, 4, by = 1)
+fig <- plot_ly(df, x = ~x)
+fig <- fig %>% add_segments(x=0,y=ci0[1,1], xend=0,yend=ci0[1,2], name = "No seats")
+fig <- fig %>% add_segments(x=1,y=ci0[1,1], xend=1,yend=ci0[1,2], name = "1 seat", visible = F)
+fig <- fig %>% add_segments(x=2,y=ci2[1,1], xend=2,yend=ci2[1,2], name = "2 seats", visible = F)
+fig <- fig %>% layout(
+    title = "Effect of GA Runoff Election on SASCA Passing",
+    xaxis = ax,
+    yaxis = ay,
+    updatemenus = list(
+    list(
+        y = 0.8,
+        buttons = list(
+          list(method = "restyle",
+               args = list("visible", list(TRUE, FALSE, FALSE)),
+               label = "No Seats"),
+
+          list(method = "restyle",
+               args = list("visible", list(FALSE, TRUE,FALSE)),
+               label = "1 Seat"), 
+          
+          list(method = "restyle",
+               args = list("visible", list(FALSE, FALSE,TRUE)),
+               label = "2 Seats"),
+          
+          list(method = "restyle",
+               args = list("visible", list(TRUE, TRUE,TRUE)),
+               label = "All Options")
+          
+          ))
+    )
+  )
+
+fig
+
+```
+
+catdog
+
+
