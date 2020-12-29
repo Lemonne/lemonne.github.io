@@ -155,7 +155,9 @@ The result of Senate votes are not just passed/not passed, but are more complex 
 
 After I had a cleaned data set, I did a linear regression looking at if the vote passed. The general equation is as following: 
 
-Probability of vote passing = vote related to sexual assault(0 or 1) + number of democratic seats + democratic president(0 or 1)
+
+> Probability of vote passing = vote related to sexual assault (0 or 1) + number of democratic seats + democratic president (0 or 1)
+
 
 The model also controls for year, as it has an effect of the vote passing. 
 
