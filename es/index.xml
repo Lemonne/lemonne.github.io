@@ -2,16 +2,16 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Nerissa Lemon</title>
-    <link>https://lemonne.github.io/es/</link>
+    <link>https://nerissalemon.com/es/</link>
     <description>Recent content on Nerissa Lemon</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>es</language><atom:link href="https://lemonne.github.io/es/index.xml" rel="self" type="application/rss+xml" />
+    <language>es</language><atom:link href="https://nerissalemon.com/es/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Contacto</title>
-      <link>https://lemonne.github.io/es/contact/</link>
+      <link>https://nerissalemon.com/es/contact/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://lemonne.github.io/es/contact/</guid>
+      <guid>https://nerissalemon.com/es/contact/</guid>
       <description></description>
     </item>
     
