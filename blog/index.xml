@@ -6,7 +6,17 @@
     <description>Recent content in Blog on Nerissa Lemon</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 11 Mar 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://nerissalemon.com/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 26 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://nerissalemon.com/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>This my Data Viz Final.</title>
+      <link>https://nerissalemon.com/blog/dataviz/</link>
+      <pubDate>Sat, 26 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://nerissalemon.com/blog/dataviz/</guid>
+      <description>Do you know how far the closest hospital to you that you should go to if you’ve been sexually assaulted?
+You may hope that it’s just your nearest hospital. Unfortanely, it’s most likely not. The majority of hospitals do not have the appropriate care in place for a sexual assault surivor. A sexual assault nurse examiner (SANE) -a particular type of sexual assault forensic examiners—are registered nurses, including nurse midwives and other advanced practice nurses, who have received specialized education and have fulfilled clinical requirements to perform sexual assault forensic exams.</description>
+    </item>
+    
     <item>
       <title>Markdown Syntax Guide</title>
       <link>https://nerissalemon.com/blog/markdown-syntax/</link>

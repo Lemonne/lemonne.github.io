@@ -3,7 +3,7 @@ title = "This my Data Viz Final."
 description = "small project showing why SASCA should pass."
 author = "Nerissa Lemon"
 date = "2020-12-26"
-draft = TRUE
+draft = FALSE
 tags = ["ml", "dataviz", "SA", "school"]
 categories = ["data science", "public policy"]
 [[images]]
