@@ -60,6 +60,7 @@ Some "fun" things to point out:
  * Often, the only way for survivors in remote areas of Alaska to reach SANE providers is to fly to a hospital. 
  * There is only one hospital serving the city of Las Vegas, and only one serving all of Washington D.C. 
 
+note: if you are interested in the spreadsheet of the data that was used to make this map, it is located [here](https://docs.google.com/spreadsheets/d/1EZlNK5Axz6dNRO1IzhLj47aQOAf9YPrao-79pbS_0h0/edit?usp=sharing).
 
 ## SASCA
 
