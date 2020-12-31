@@ -37,7 +37,7 @@ results_pred <- predict(results.a, type = "response")
 ```
 Do you know how far the closest hospital to you that you should go to if you've been sexually assaulted? 
 
-You may hope that it's just your nearest hospital. Unfortunately, it's most likely not. The majority of hospitals do not have the appropriate care in place for a sexual assault survivor. A sexual assault nurse examiner (SANE) -a particular type of sexual assault forensic examiners—are registered nurses, including nurse midwives and other advanced practice nurses, who have received specialized education and have fulfilled clinical requirements to perform sexual assault forensic exams. 
+You may hope that it's just your nearest hospital. Unfortunately, it's most likely not. The majority of hospitals do not have the appropriate care in place for a sexual assault survivor. A sexual assault nurse examiner (SANE) -a particular type of sexual assault forensic examiners— are registered nurses, including nurse midwives and other advanced practice nurses, who have received specialized education and have fulfilled clinical requirements to perform sexual assault forensic exams. 
 
 According to a GAO study<cite>[^1]</cite>, "coalition officials in Wisconsin told us that nearly half of all counties in the state do not have any examiner programs available, and coalition officials in Nebraska told us that most counties in the state do not have examiner programs available."
 
@@ -50,7 +50,8 @@ In Milwaukee WI, only 1 out of the 5 major hospitals has examiners. In Washingto
 Use the below map to see how many locations there are in your state! This information is from [here](https://www.nbcnews.com/health/sexual-health/map-where-sexual-assault-forensic-exams-are-available-your-state-n1252376). 
 This is supposed to be a snapshot in time, to show where SANE providers are. There are some states that are blank- those are states where there is not a listing easily found of SANE providers.  
 
-This is _not a resource for survivors_. If you are a survivor, please know that I believe you, and call [RAINN](https://www.rainn.org/), and they will direct you to your local rape crisis center. Your local rape crisis center will treat you with the respect and dignity you deserve, and be able to give you the best resources possible in a survivor-centered way, which is not something that this map can guarantee. 
+<p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> _This is not a resource for survivors_. If you are a survivor, please know that I believe you. If you call [RAINN](https://www.rainn.org/) they will direct you to your local rape crisis center.<br>Your local rape crisis center will treat you with the respect and dignity you deserve, and be able to give you the best resources possible in a survivor-centered way, which is not something that this map can guarantee.</p>
+
 
 <iframe seamless frameborder="0" src="https://public.tableau.com/shared/FN6WYF2KN?:embed=yes&:display_count=yes&:showVizHome=no" width = '1000' height = '700' scrolling='yes' ></iframe> 
 
@@ -58,21 +59,33 @@ Some "fun" things to point out:
 
  * Rhode Island has more centers than Montana, even though it is `r 1212/147040 `% of Montana's size. 
  * Often, the only way for survivors in remote areas of Alaska to reach SANE providers is to fly to a hospital. 
- * There is only one hospital serving the city of Las Vegas, and only one serving all of Washington D.C. 
+ * There is only one hospital serving the city of Las Vegas.
+ * Less than half the counties in Wisconsin have a SANE provider.
 
 note: if you are interested in the spreadsheet of the data that was used to make this map, it is located [here](https://docs.google.com/spreadsheets/d/1EZlNK5Axz6dNRO1IzhLj47aQOAf9YPrao-79pbS_0h0/edit?usp=sharing).
 
 ## SASCA
 
-The Survivors' Access to Supportive Care Act is a bill that was introduced in the first session of the 116th congress, and then referred to the Committee on Health, Education, Labor, and Pensions. It has been languishing there due to a variety of factors, one of which is the main sponsor, Patty Murray from Washington state, has low confidence that it would be passed if brought up for a vote. The SASCA bill would “increase access to medical forensic sexual assault examinations and treatment provided by sexual assault forensic examiners for survivors, by identifying and addressing gaps in obtaining those services.” <cite>[^2]</cite>   
+The Survivors' Access to Supportive Care Act is a bill that was introduced in the first session of the 116th congress, and then referred to the Committee on Health, Education, Labor, and Pensions. It has been languishing there due to a variety of factors, one of which is the main sponsor, Patty Murray from Washington state, has low confidence that it would be passed if brought up for a vote. The SASCA bill would “increase access to medical forensic sexual assault examinations and treatment provided by sexual assault forensic examiners for survivors, by identifying and addressing gaps in obtaining those services.” <cite>[^2]</cite>  
+
+The SASCA bill would also: 
+
+* mandate that every state has an online tool that would list how and where survivors can find care, and that care relating to a sexual assault is _free of charge, by law._
+* a notice of State and Federal laws prohibiting charging or billing survivors of sexual assault for care and services related to sexual assault in hospitals.
+* focus first on rural or underserved areas, including "training to help connect sexual assault survivors who are Native American with SAFEs or SANEs, including through emergency first aid, referrals, culturally competent support, and forensic evidence collection in rural communities."<cite>[^2]</cite> 
+* 15% of the budget for the bill is specifically reserved for grants to entities that affiliated with Native American tribes or tribal organizations.  
+* create a standardized way for hospitals to report, and create standards of care. 
+
+Prioritizing Native women is important: they have the highest rate of sexual assault compared to any other demographic in the country, at a rate of 2x a white American woman.<cite>[^3]</cite>
+
+[^2]: The above quote is from the text of the SASCA [bill](https://www.congress.gov/bill/116th-congress/senate-bill/402/text)
+[^3]: This fact is from the [NCAI Policy Research Center.](https://www.ncai.org/attachments/PolicyPaper_tWAjznFslemhAffZgNGzHUqIWMRPkCDjpFtxeKEUVKjubxfpGYK_Policy%20Insights%20Brief_VAWA_020613.pdf)
 
 ## What is the budget of SASCA?
 
 The bill itself has a pilot program that terminates after 2 years, and requests 7 million dollars, or 1.461× 10-6% of the federal budget, to be appropriated to carry it out. 
 
 The graph below compares the budget to the Violence Against Women Act, and H.R. 6893, a mental health bill. 
-
-[^2]: The above quote is from the text of the SASCA [bill](https://www.congress.gov/bill/116th-congress/senate-bill/402/text)
 
 
 ```{r,echo=FALSE}
@@ -224,7 +237,7 @@ As you can see, the overall probability is right around 50%, or almost a coin fl
 ### Every seat matters
 Every democratic seat matters: in January, there are 2 Congressional run-off elections happening, which will change the probability of SASCA getting brought up and passed in the new year. 
 
-In the graph below, you can see how the number of seats changes the range of likelyhood that SASCA will pass. 
+In the graph below, you can see how the number of seats changes the range of likelyhood that SASCA will pass, with 1=100% likelihood 
 
 ```{r,echo=FALSE}
 #what I want to do: create confidence intervals for 48, 49, 50, senators. 
@@ -257,8 +270,7 @@ ay <- list(
   showline = FALSE,
   showticklabels = TRUE,
   showgrid = TRUE,
-  min = 0,
-  max = 1
+  range = c(0,1)
 )
 
 #try = seq(1, 4, by = 1)
